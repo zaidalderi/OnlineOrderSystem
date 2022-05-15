@@ -33,7 +33,7 @@
               exit;
             }
           }else{
-            $sql = "UPDATE cart_item SET cart_item.quantity = ? WHERE cart_item.user_cart_id = ? AND cart_item.item_id = ?";
+            $sql = "UPDATE cart_item SET cart_item.quantity = cart_item.quantity + ? WHERE cart_item.user_cart_id = ? AND cart_item.item_id = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("iii", $quantity, $cartID, $itemID);
             if($stmt->execute()){

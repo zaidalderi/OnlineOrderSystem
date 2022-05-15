@@ -180,18 +180,24 @@
         $stmt->bind_param("i",$cartID);
         $stmt->execute();
         $result = $stmt->get_result();
+        $sql2 = "SELECT SUM(cart_item.quantity) AS totalQuantity FROM cart_item WHERE user_cart_id = ?";
+        $stmt = $conn->prepare($sql2);
+        $stmt->bind_param("i",$cartID);
+        $stmt->execute();
+        $result2 = $stmt->get_result();
+        $rows2 = $result2->fetch_assoc();
       ?>
       <div class="col-md-5 col-lg-4 order-md-last">
         <h4 class="d-flex justify-content-between align-items-center mb-3">
           <span class="text-primary">Your cart</span>
-          <span class="badge bg-primary rounded-pill"><?php echo mysqli_num_rows($result)?></span>
+          <span class="badge bg-primary rounded-pill"><?php echo $rows2['totalQuantity']; ?></span>
         </h4>
         <ul class="list-group mb-3">
           <?php
             while($rows = $result->fetch_assoc()){?>
                 <li class="list-group-item d-flex justify-content-between lh-sm">
                     <div>
-                    <h6 class="my-0"><?php echo $rows['menu_name']?></h6>
+                    <h6 class="my-0"><?php echo $rows['menu_name']?><small><?php echo " x" . $rows['selectedQuantity']?></small></h6>
                     <small class="text-muted"><?php echo $rows['category_name']?></small>
                     </div>
                     <span class="text-muted">£<?php echo $rows['itemTotal']?></span>
